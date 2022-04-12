@@ -33,8 +33,8 @@ def build_dataset(image_set, args):
         from .coco_panoptic import build as build_coco_panoptic
         return build_coco_panoptic(image_set, args)
 
-    if args.dataset_file == 'vid_single':
+    if args.dataset_file in ['vid_single', 'toy_single']:
         return build_vid_single(image_set, args)
-    if args.dataset_file == "vid_multi":
+    if args.dataset_file in ["vid_multi", 'toy_multi']:
         return build_vid_multi(image_set, args)
     raise ValueError(f'dataset {args.dataset_file} not supported')

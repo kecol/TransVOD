@@ -7,7 +7,6 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 # ------------------------------------------------------------------------
 
-
 import argparse
 import datetime
 import json
@@ -136,7 +135,7 @@ def get_args_parser():
 
 def main(args):
     print(args.dataset_file, 11111111)
-    if args.dataset_file == "vid_single":
+    if args.dataset_file in ["vid_single", "toy_single"]:
         from engine_single import evaluate, train_one_epoch
         import util.misc as utils
         
@@ -167,8 +166,12 @@ def main(args):
     n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print('number of params:', n_parameters)
 
-    dataset_train = build_dataset(image_set='train_joint', args=args)
-    dataset_val = build_dataset(image_set='val', args=args)
+    if args.dataset_file in ['single_toy', 'multi_toy']:
+        dataset_train = build_dataset(image_set='train_toy', args=args)
+        dataset_val = build_dataset(image_set='valid_toy', args=args)
+    else:
+        dataset_train = build_dataset(image_set='train_joint', args=args)
+        dataset_val = build_dataset(image_set='val', args=args)        
 
     if args.distributed:
         if args.cache_mode:
