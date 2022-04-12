@@ -7,6 +7,7 @@ EXP_DIR=exps/multibaseline/toy_r50
 mkdir -p ${EXP_DIR}
 PY_ARGS=${@:1}
 python -u main.py \
+    --num_classes 4 \
     --epochs 1 \
     --eval \
     --num_feature_levels 1 \
