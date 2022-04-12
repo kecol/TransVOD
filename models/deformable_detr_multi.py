@@ -448,7 +448,8 @@ class MLP(nn.Module):
 
 
 def build(args):
-    num_classes = 31
+    
+    num_classes = args.num_classes
     device = torch.device(args.device)
 
     backbone = build_backbone(args)
