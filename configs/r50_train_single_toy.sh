@@ -8,6 +8,7 @@ mkdir ${EXP_DIR}
 PY_ARGS=${@:1}
 python -u main.py \
     --num_classes 4 \
+    --vid_path ${TOY_DIR} \
     --epochs 2 \
     --num_feature_levels 1\
     --num_queries 300 \

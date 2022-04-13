@@ -243,8 +243,8 @@ def build(image_set, args):
         "train_vid": [(root / "Data" / "VID", root / "annotations" / 'imagenet_vid_train.json')],
         "train_joint": [(root / "Data" , root / "annotations" / 'imagenet_vid_train_joint_30.json')],
         "val": [(root / "Data" / "VID", root / "annotations" / 'imagenet_vid_val.json')],
-        "train_toy": [(root / 'train', root / 'train/annotanations.json')],
-        "valid_toy": [(root / 'valid', root / 'valid/annotanations.json')],
+        "train_toy": [(root / 'train', root / 'train/annotations.json')],
+        "valid_toy": [(root / 'valid', root / 'valid/annotations.json')],
     }
     datasets = []
     for (img_folder, ann_file) in PATHS[image_set]:
