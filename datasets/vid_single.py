@@ -159,7 +159,10 @@ def make_coco_transforms(image_set):
             normalize,
         ])
     elif image_set == 'train_toy' or image_set == 'valid_toy':
-        return T.Compose([normalize])
+        return T.Compose([
+            T.RandomResize([600], max_size=1000),
+            normalize,
+        ])
 
     raise ValueError(f'unknown {image_set}')
 
