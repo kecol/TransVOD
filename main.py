@@ -138,7 +138,7 @@ def get_args_parser():
 def main(args):
     print(args.dataset_file, 11111111)
     if args.dataset_file in ["vid_single", "toy_single"]:
-        from engine_single import evaluate, train_one_epoch
+        from engine_single import predict, evaluate, train_one_epoch
         import util.misc as utils
         
     else:
@@ -287,6 +287,9 @@ def main(args):
             utils.save_on_master(coco_evaluator.coco_eval["bbox"].eval, output_dir / "eval.pth")
             utils.save_on_master(test_stats, output_dir / "test_stats.pth")
         return
+    #
+    # TODO: generate prediction of one clip/frame
+    #
 
     print("Start training")
     start_time = time.time()

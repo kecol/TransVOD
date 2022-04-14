@@ -3,7 +3,7 @@
 set -x
 T=`date +%m%d%H%M`
 
-EXP_DIR=exps/singlebaseline/toy_r50_e10_nf4_ld6,7_lr0.0002_nq25_bs8_wbox_joint_MEGA_detrNorm_class4_pretrain_coco_dc5
+EXP_DIR=exps/singlebaseline/toy_mini_RESIZE_r50_e10_nf4_ld6,7_lr0.0002_nq25_bs8_wbox_joint_MEGA_detrNorm_class4_pretrain_coco_dc5
 mkdir ${EXP_DIR}
 PY_ARGS=${@:1}
 #    --coco_pretrain \
