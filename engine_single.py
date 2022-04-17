@@ -165,11 +165,10 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
     return stats, coco_evaluator
 
 
-
 @torch.no_grad()
 def predict(model, criterion, postprocessors, data_loader, base_ds, device, output_dir):
     
-    print('engine_single.predict() start')
+    print('engine_single.predict() start...')
     
     model.eval()
     criterion.eval()
@@ -177,9 +176,11 @@ def predict(model, criterion, postprocessors, data_loader, base_ds, device, outp
     iou_types = tuple(k for k in ('segm', 'bbox') if k in postprocessors.keys())
     print('iou_types:', iou_types)
 
+    preds = []
+
     for i, (samples, targets) in enumerate(data_loader):
 
-        print(f'{i}')
+        print(f'iter {i} ...')
         
         samples = samples.to(device)
         targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
@@ -197,10 +198,13 @@ def predict(model, criterion, postprocessors, data_loader, base_ds, device, outp
 
         orig_target_sizes = torch.stack([t["orig_size"] for t in targets], dim=0)
         results = postprocessors['bbox'](outputs, orig_target_sizes)
+    
         if 'segm' in postprocessors.keys():
             target_sizes = torch.stack([t["size"] for t in targets], dim=0)
             results = postprocessors['segm'](results, outputs, orig_target_sizes, target_sizes)
+    
         res = {target['image_id'].item(): output for target, output in zip(targets, results)}
-        torch.save
 
-    return stats, coco_evaluator
+        preds.append(res)
+    
+    return preds

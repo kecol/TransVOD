@@ -129,6 +129,7 @@ def get_args_parser():
     parser.add_argument('--start_epoch', default=0, type=int, metavar='N',
                         help='start epoch')
     parser.add_argument('--eval', action='store_true')
+    parser.add_argument('--inference', action='store_true')
     parser.add_argument('--num_workers', default=0, type=int)
     parser.add_argument('--cache_mode', default=False, action='store_true', help='whether to cache images on memory')
 
@@ -169,8 +170,13 @@ def main(args):
     print('number of params:', n_parameters)
 
     if args.dataset_file in ['toy_single', 'toy_multi']:
-        dataset_train = build_dataset(image_set='train_toy', args=args)
-        dataset_val = build_dataset(image_set='valid_toy', args=args)
+        if args.inference:
+            # to avoid breaking the program we create the variable
+            dataset_train = build_dataset(image_set='inference_toy', args=args)
+            dataset_val = build_dataset(image_set='inference_toy', args=args)
+        else:
+            dataset_train = build_dataset(image_set='train_toy', args=args)
+            dataset_val = build_dataset(image_set='valid_toy', args=args)
     else:
         dataset_train = build_dataset(image_set='train_joint', args=args)
         dataset_val = build_dataset(image_set='val', args=args)        
@@ -256,7 +262,7 @@ def main(args):
         else:
             checkpoint = torch.load(args.resume, map_location='cpu')
 
-        if args.eval:
+        if args.eval or args.inference:
             missing_keys, unexpected_keys = model_without_ddp.load_state_dict(checkpoint['model'], strict=False)
         else:
             tmp_dict = model_without_ddp.state_dict().copy()
@@ -287,9 +293,17 @@ def main(args):
             utils.save_on_master(coco_evaluator.coco_eval["bbox"].eval, output_dir / "eval.pth")
             utils.save_on_master(test_stats, output_dir / "test_stats.pth")
         return
-    #
-    # TODO: generate prediction of one clip/frame
-    #
+    elif args.inference:
+        #
+        # TODO: generate prediction of one clip/frame
+        #
+        print('we will try to use the model for inference and get results')
+        #
+        preds = predict(model, criterion, postprocessors, data_loader_val, base_ds, device, args.output_dir)
+        if args.output_dir:
+            utils.save_on_master(preds, output_dir / "preds.pth")
+
+        return
 
     print("Start training")
     start_time = time.time()

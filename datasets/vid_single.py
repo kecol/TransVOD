@@ -163,6 +163,11 @@ def make_coco_transforms(image_set):
             T.RandomResize([600], max_size=1000),
             normalize,
         ])
+    elif image_set == 'inference_toy':
+        return T.Compose([
+            T.RandomResize([600], max_size=600),
+            normalize,
+        ])
 
     raise ValueError(f'unknown {image_set}')
 
@@ -179,6 +184,7 @@ def build(image_set, args):
         "val": [(root / "Data" / "VID", root / "annotations" / 'imagenet_vid_val.json')],
         "train_toy": [(root / 'train', root / 'train/annotations.json')],
         "valid_toy": [(root / 'valid', root / 'valid/annotations.json')],
+        "inference_toy": [(root / 'inference', root / 'inference/annotations.json')],        
     }
     datasets = []
     for (img_folder, ann_file) in PATHS[image_set]:
