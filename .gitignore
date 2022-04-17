@@ -2,3 +2,5 @@
 *.pyc
 exps/*
 tmp
+.ipynb_checkpoints
+videos
